@@ -123,3 +123,23 @@ em cada invocação de `resume`; uma autorização anterior não é herdada. O r
 MySQL e relê as opções para verificar o resultado. Em dry-run não restaura widgets.
 
 O formato e os caminhos do state estão em [observabilidade](observability.md).
+
+## Destino ausente antes da cópia de uma instalação aninhada
+
+Ao substituir a instalação pai, suas instalações filhas podem deixar de existir
+no destino até serem transferidas por suas próprias etapas. O backup completo
+do pai preserva a árvore anterior.
+
+Quando `backup_existing_test` encontra um destino ausente, retorna sucesso sem
+alteração e a métrica `destination_absent: 1`. Nesse caso específico, o executor
+não exige bootstrap do WordPress no diagnóstico posterior ao backup, pois a
+transferência ainda não ocorreu.
+
+A exceção exige sucesso da etapa, ausência de alteração e a métrica explícita.
+Backups que falham ou destinos existentes mantêm as verificações anteriores.
+As validações posteriores à transferência e à configuração do banco continuam
+vigentes. A correção não modifica permissões, backups, configuração YAML ou
+manifestos de execuções existentes.
+
+Testes em `tests/unit/test_pipeline.py` cobrem destino ausente, regressão em
+destino existente e falha de backup mesmo com a métrica de ausência.

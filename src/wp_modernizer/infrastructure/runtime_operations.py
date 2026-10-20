@@ -410,7 +410,7 @@ class RuntimeOperations:
             return self._failed(step_name, str(exc))
         try:
             source_url = self._databases.read_source_site_url(source_connection)
-            source_installation = self._parser.parse(
+            source_installation = self._parser.parse_source(
                 str(source_path), installation_id, installation.source_environment
             )
             test_url = OrganizationalTestUrlPolicy(source_installation.domain).resolve(

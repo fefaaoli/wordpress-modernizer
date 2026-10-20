@@ -143,3 +143,22 @@ manifestos de execuções existentes.
 
 Testes em `tests/unit/test_pipeline.py` cobrem destino ausente, regressão em
 destino existente e falha de backup mesmo com a métrica de ausência.
+
+## Origem de produção em htdocs arquivado
+
+A leitura da origem aceita htdocs ou htdocs_YYYYMMDD, com data válida,
+dentro das raízes permitidas e da estrutura <domain>/wp-<instance>/.
+O formato arquivado é aceito por parse_source somente em PRODUÇÃO.
+
+A configuração, o planejamento e a inspeção do banco usam parse_source
+para a origem. A validação dos destinos continua exigindo htdocs.
+O destino destrutivo é revalidado pelo analisador estrito, além das
+proteções existentes de ambiente, caminho exato e links simbólicos.
+
+Uma origem arquivada exige destination_path explícito apontando para
+o htdocs de TESTE. A ausência desse override faz a validação recusar
+o destino herdado da origem.
+
+Validado inicialmente com 591 testes unitários e dry-run individual
+de lilacs-guias-pt: 22 etapas, nenhuma falha.
+Não houve alteração de arquivos na produção.

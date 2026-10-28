@@ -12,7 +12,7 @@ from wp_modernizer.config.models import (
     ManagedPluginConfig,
     ServerConfig,
 )
-from wp_modernizer.domain.errors import ConfigurationError
+from wp_modernizer.domain.errors import ConfigurationError, UnsafeOperationError
 
 
 def valid_config():
@@ -347,7 +347,7 @@ def test_config_rejects_archived_source_without_explicit_destination():
         "/home/apps/example.org/wp-main/htdocs_20261014/guide"
     )
     del raw["installations"]["i"]["destination_path"]
-    with pytest.raises(Exception):
+    with pytest.raises(UnsafeOperationError, match="Origem arquivada requer"):
         ApplicationConfig.model_validate(raw)
 
 
@@ -356,5 +356,5 @@ def test_config_rejects_explicit_archived_destination():
     raw["installations"]["i"]["destination_path"] = (
         "/home/apps/example.org/wp-test/htdocs_20261014/guide"
     )
-    with pytest.raises(Exception):
+    with pytest.raises(UnsafeOperationError, match="Origem arquivada requer"):
         ApplicationConfig.model_validate(raw)

@@ -313,13 +313,13 @@ def test_backup_absent_destination_does_not_require_wordpress(absent) -> None:
                 {"destination_absent": 1} if absent else {},
             )
 
-    probe = FakeProbe([
-        health(HealthStatus.HEALTHY),
-        health(HealthStatus.PHP_CONFIG_ERROR),
-    ])
-    result = PipelineRunner(
-        probe, FakeStateStore(), FakeFileSystem(), FakeClock()
-    ).run(
+    probe = FakeProbe(
+        [
+            health(HealthStatus.HEALTHY),
+            health(HealthStatus.PHP_CONFIG_ERROR),
+        ]
+    )
+    result = PipelineRunner(probe, FakeStateStore(), FakeFileSystem(), FakeClock()).run(
         manifest(),
         Path("/site"),
         [OperationStep("backup_existing_test", BackupOperations())],

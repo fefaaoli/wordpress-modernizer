@@ -74,12 +74,8 @@ def test_archived_production_source_preserves_actual_path(parser, nested):
     path = "/home/apps/example.org/wp-main/htdocs_20261014" + nested
     item = parser.parse_source(path, "site", Environment.PRODUCTION)
     assert item.path == Path(path)
-    assert item.document_root == Path(
-        "/home/apps/example.org/wp-main/htdocs_20261014"
-    )
-    assert item.relative_nested_path == (
-        Path("guias-e-manuais") if nested else None
-    )
+    assert item.document_root == Path("/home/apps/example.org/wp-main/htdocs_20261014")
+    assert item.relative_nested_path == (Path("guias-e-manuais") if nested else None)
     with pytest.raises(UnsafeOperationError):
         parser.parse(path, "site", Environment.TEST)
 
@@ -131,6 +127,6 @@ def test_archive_source_rejects_traversal_and_disallowed_roots(parser):
 
 def test_source_parser_preserves_traditional_source_support(parser):
     path = "/home/apps/example.org/wp-main/htdocs/guide"
-    assert parser.parse_source(
+    assert parser.parse_source(path, "site", Environment.PRODUCTION) == parser.parse(
         path, "site", Environment.PRODUCTION
-    ) == parser.parse(path, "site", Environment.PRODUCTION)
+    )

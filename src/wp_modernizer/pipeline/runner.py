@@ -122,7 +122,8 @@ class PipelineRunner:
             )
             probe_requirements = (
                 set()
-                if absent_destination_backup or step.name
+                if absent_destination_backup
+                or step.name
                 in {
                     "copy_files",
                     "snapshot_source_database",
